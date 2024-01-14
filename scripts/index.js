@@ -6,26 +6,26 @@ const pageContent = document.querySelector('.page__content');
 const cardsList = pageContent.querySelector('.places__list');
 
 // Функция создания карточки
-function addCard(card, deleteCard) {
+function createCard(cardData, deleteCard) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
-  cardElement.querySelector('.card__title').textContent = card.name;
-  cardElement.querySelector('.card__image').src = card.link;
-  cardElement.querySelector('.card__image').alt = card.alt;
-
-  cardsList.append(cardElement);
-
+  cardElement.querySelector('.card__title').textContent = cardData.name;
+  const cardImage = cardElement.querySelector(".card__image");
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.alt;
+  
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", deleteCard);
+  deleteButton.addEventListener("click", () =>  deleteCard(cardElement))
+
+  return cardElement;
 }
 
 // Функция удаления карточки
-function deleteCard(event) {
-  const deleteItem = event.target.closest(".card");
-  deleteItem.remove();
+function deleteCard(card) {
+  card.remove();
 }
 
 // Вывести карточки на страницу
-initialCards.forEach(function (card) {
-  addCard(card, deleteCard);
+initialCards.forEach(function (cardData) {
+  cardsList.append(createCard(cardData, deleteCard));
 });
