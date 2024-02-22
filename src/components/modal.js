@@ -24,6 +24,12 @@ export function closePopupOnCross() {
   window.removeEventListener("keydown", keyHandlerEsc);
 }
 
+export function closeModalOver(evt) {
+  if (evt.target.classList.contains("popup")) {
+    closeModal(evt.target);
+  }
+}
+
 export function handleFormSubmit(evt) {
   const popupEditElement = document.querySelector(".popup_type_edit");
   evt.preventDefault();
