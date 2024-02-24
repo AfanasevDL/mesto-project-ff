@@ -1,27 +1,31 @@
-import { nameInput,jobInput, profileTitle, profileDescription } from "../constants";
+import {
+  popupProfileEditElement,
+  nameInput,
+  jobInput,
+  profileTitle,
+  profileDescription,
+} from "../constants";
 
-export function openModal(formElement) {
-  formElement.classList.add("popup_is-animated");
-  formElement.classList.add("popup_is-opened");
-  window.addEventListener("keydown", keyHandlerEsc);
+export function openModal(popup) {
+  popup.classList.add("popup_is-animated");
+  setTimeout(() => {
+    popup.classList.add("popup_is-opened");
+  }, 1);
+  window.addEventListener("keydown", handleEscape);
 }
 
-export function closeModal(formElement) {
-  formElement.classList.remove("popup_is-opened");
-  window.removeEventListener("keydown", keyHandlerEsc);
+export function closeModal(popup) {
+  setTimeout(() => {
+    popup.classList.remove("popup_is-opened");
+  }, 1);
+  window.removeEventListener("keydown", handleEscape);
 }
 
-function keyHandlerEsc(evt) {
+function handleEscape(evt) {
   if (evt.key === "Escape") {
-    const formIsOpened = document.querySelector(".popup_is-opened");
-    formIsOpened.classList.remove("popup_is-opened");
+    const openedPopup = document.querySelector(".popup_is-opened");
+    closeModal(openedPopup);
   }
-}
-
-export function closePopupOnCross() {
-  const openedModal = document.querySelector(".popup_is-opened");
-  openedModal.classList.remove("popup_is-opened");
-  window.removeEventListener("keydown", keyHandlerEsc);
 }
 
 export function closeModalOver(evt) {
@@ -30,10 +34,9 @@ export function closeModalOver(evt) {
   }
 }
 
-export function handleFormSubmit(evt) {
-  const popupEditElement = document.querySelector(".popup_type_edit");
+export function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value.trim();
   profileDescription.textContent = jobInput.value.trim();
-  closeModal(popupEditElement);
+  closeModal(popupProfileEditElement);
 }

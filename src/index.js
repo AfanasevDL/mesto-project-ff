@@ -1,30 +1,64 @@
-import './pages/index.css';
-import { cardsList, popupEditElement, popupImageElement, popupCloseButtons, popupNewCardElement, nameInput, jobInput, profileTitle, profileDescription, formProfileEditElement, formNewCardElement } from './constants.js';
-import { initialCards, createCard, deleteCard, handleAddNewCard} from './components/cards.js';
-import { openModal, closePopupOnCross, closeModalOver, handleFormSubmit} from './components/modal.js';
-
-const profileAddButton = document.querySelector(".profile__add-button");
-const profileEditButton = document.querySelector(".profile__edit-button");
+import "./pages/index.css";
+import {
+  cardsList,
+  popupProfileEditElement,
+  popupImageElement,
+  popupNewCardElement,
+  nameInput,
+  jobInput,
+  profileTitle,
+  profileDescription,
+  formProfileEditElement,
+  formNewCardElement,
+  popups,
+  profileAddNewCardButton,
+  profileEditButton,
+} from "./constants.js";
+import {
+  createCard,
+  deleteCard,
+  likeCard,
+  handleCardClick,
+  handleAddNewCard,
+} from "./components/card.js";
+import { initialCards } from "./components/cards.js";
+import {
+  openModal,
+  closeModal,
+  closeModalOver,
+  handleProfileFormSubmit,
+} from "./components/modal.js";
 
 initialCards.forEach(function (cardData) {
-  cardsList.append(createCard(cardData, deleteCard));
+  cardsList.append(
+    createCard(cardData, { deleteCard, likeCard, handleCardClick })
+  );
 });
 
 profileEditButton.addEventListener("click", () => {
-  openModal(popupEditElement);
+  openModal(popupProfileEditElement);
   jobInput.value = profileDescription.textContent;
   nameInput.value = profileTitle.textContent;
 });
 
-profileAddButton.addEventListener("click", () => openModal(popupNewCardElement));
+profileAddNewCardButton.addEventListener("click", () =>
+  openModal(popupNewCardElement)
+);
 
-popupCloseButtons.forEach((element) => {
-  element.addEventListener("click", () => closePopupOnCross());
+popups.forEach((popup) => {
+  popup.addEventListener("mousedown", (evt) => {
+    if (evt.target.classList.contains("popup_opened")) {
+      closeModal(popup);
+    }
+    if (evt.target.classList.contains("popup__close")) {
+      closeModal(popup);
+    }
+  });
 });
 
-popupEditElement.addEventListener("mousedown", closeModalOver);
+popupProfileEditElement.addEventListener("mousedown", closeModalOver);
 popupNewCardElement.addEventListener("mousedown", closeModalOver);
 popupImageElement.addEventListener("mousedown", closeModalOver);
 
-formProfileEditElement.addEventListener("submit", handleFormSubmit);
+formProfileEditElement.addEventListener("submit", handleProfileFormSubmit);
 formNewCardElement.addEventListener("submit", handleAddNewCard);
