@@ -44,6 +44,7 @@ export function handleCardClick(cardData) {
   openModal(popupImageElement);
   popupImageTitle.textContent = cardData.name;
   popupImage.src = cardData.link;
+  popupImage.alt = cardData.alt;
 }
 
 export function handleAddNewCard(evt) {

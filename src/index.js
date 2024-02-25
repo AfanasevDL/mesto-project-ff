@@ -2,7 +2,6 @@ import "./pages/index.css";
 import {
   cardsList,
   popupProfileEditElement,
-  popupImageElement,
   popupNewCardElement,
   nameInput,
   jobInput,
@@ -25,8 +24,6 @@ import { initialCards } from "./components/cards.js";
 import {
   openModal,
   closeModal,
-  closeModalOver,
-  handleProfileFormSubmit,
 } from "./components/modal.js";
 
 initialCards.forEach(function (cardData) {
@@ -45,9 +42,19 @@ profileAddNewCardButton.addEventListener("click", () =>
   openModal(popupNewCardElement)
 );
 
+function handleProfileFormSubmit(evt) {
+  evt.preventDefault();
+  profileTitle.textContent = nameInput.value.trim();
+  profileDescription.textContent = jobInput.value.trim();
+  closeModal(popupProfileEditElement);
+}
+
+formProfileEditElement.addEventListener("submit", handleProfileFormSubmit);
+formNewCardElement.addEventListener("submit", handleAddNewCard);
+
 popups.forEach((popup) => {
   popup.addEventListener("mousedown", (evt) => {
-    if (evt.target.classList.contains("popup_opened")) {
+    if (evt.target.classList.contains("popup_is-opened")) {
       closeModal(popup);
     }
     if (evt.target.classList.contains("popup__close")) {
@@ -55,10 +62,3 @@ popups.forEach((popup) => {
     }
   });
 });
-
-popupProfileEditElement.addEventListener("mousedown", closeModalOver);
-popupNewCardElement.addEventListener("mousedown", closeModalOver);
-popupImageElement.addEventListener("mousedown", closeModalOver);
-
-formProfileEditElement.addEventListener("submit", handleProfileFormSubmit);
-formNewCardElement.addEventListener("submit", handleAddNewCard);
