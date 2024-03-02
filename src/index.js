@@ -25,6 +25,7 @@ import {
   openModal,
   closeModal,
 } from "./components/modal.js";
+import { validationConfig, enableValidation, clearValidation } from "./components/validation.js";
 
 initialCards.forEach(function (cardData) {
   cardsList.append(
@@ -34,13 +35,15 @@ initialCards.forEach(function (cardData) {
 
 profileEditButton.addEventListener("click", () => {
   openModal(popupProfileEditElement);
+  clearValidation(popupProfileEditElement, validationConfig);
   jobInput.value = profileDescription.textContent;
   nameInput.value = profileTitle.textContent;
 });
 
-profileAddNewCardButton.addEventListener("click", () =>
-  openModal(popupNewCardElement)
-);
+profileAddNewCardButton.addEventListener("click", () => {
+  openModal(popupNewCardElement);
+  clearValidation(popupNewCardElement, validationConfig);
+});
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -62,3 +65,5 @@ popups.forEach((popup) => {
     }
   });
 });
+
+enableValidation(validationConfig);
