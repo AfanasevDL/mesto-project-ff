@@ -43,8 +43,13 @@ export function createCard(
 export function deleteCard(evt) {
   const card = evt.target.closest(".card");
   const cardId = card.dataset.cardId;
-  deleteCardAPI(cardId);
-  card.remove();
+  deleteCardAPI(cardId)
+    .then((card) => {
+      card.remove()
+  })
+    .catch((err) => {
+    console.log(err);
+  });
 }
 
 export function likeCard(evt, cardId) {
