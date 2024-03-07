@@ -1,27 +1,11 @@
-import {
-  cardsList,
-  cardTemplate,
-  popupImageElement,
-  newCardNameInput,
-  newCardUrlInput,
-  popupImageTitle,
-  popupImage,
-  formProfileEditElement,
-} from "../constants.js";
-import { openModal, closeModal } from "./modal.js";
-import {
-  deleteLike,
-  putLike,
-  getUserIn,
-  deleteCardAPI,
-  config,
-  postNewCard,
-} from "./api.js";
+import { deleteLike, putLike, deleteCardAPI, config } from "./api.js";
 
 export function createCard(
+  userId,
   cardData,
   { deleteCard, likeCard, handleCardClick }
 ) {
+  const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardTitle = cardElement.querySelector(".card__title");
   const cardImage = cardElement.querySelector(".card__image");
@@ -35,17 +19,15 @@ export function createCard(
   cardLikesCount.textContent = cardData.likes.length;
   cardElement.dataset.cardId = cardData._id;
   cardElement.dataset.ownerId = cardData.owner._id;
+
   cardImage.addEventListener("click", () => handleCardClick(cardData));
   likeButton.addEventListener("click", (evt) => likeCard(evt, cardData._id));
   deleteButton.addEventListener("click", (evt) => deleteCard(evt));
-  getUserIn().then((data) => {
-    const cardsLikeArr = cardData.likes;
-    for (let i = 0; i < cardsLikeArr.length; i++) {
-      if (cardsLikeArr[i]._id == data._id) {
-        likeButton.classList.add("card__like-button_is-active");
-      }
-    }
-  });
+
+  if (cardData.likes.some((element) => element._id === userId)) {
+    likeButton.classList.add("card__like-button_is-active");
+  }
+
   fetch(config.baseUrl + "/users/me", {
     headers: config.headers,
   })
@@ -66,74 +48,18 @@ export function deleteCard(evt) {
 }
 
 export function likeCard(evt, cardId) {
-  const target = evt.target;
-  let currentLikes = target.parentNode.querySelector(".card__like-count");
-  if (evt.target.classList.contains("card__like-button_is-active")) {
-    deleteLike(cardId)
-      .then((updatedCard) => {
-        evt.target.classList.remove("card__like-button_is-active");
-        currentLikes.textContent = updatedCard.likes.length;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    putLike(cardId)
-      .then((updatedCard) => {
-        evt.target.classList.add("card__like-button_is-active");
-        currentLikes.textContent = updatedCard.likes.length;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
-
-export function handleCardClick(cardData) {
-  openModal(popupImageElement);
-  popupImageTitle.textContent = cardData.name;
-  popupImage.src = cardData.link;
-  popupImage.alt = cardData.alt;
-}
-
-export const handleAddNewCard = async (evt) => {
-  evt.preventDefault();
-  renderLoading(true, formProfileEditElement.querySelector(".popup__button"));
-  const newCard = {
-    name: newCardNameInput.value,
-    link: newCardUrlInput.value,
-    alt: newCardNameInput.value,
-  };
-
-  postNewCard(newCard)
-    .then((newCard) => {
-      renderCard(newCard);
-      closeModal();
+  const currentLikes = evt.target.parentNode.querySelector(".card__like-count");
+  const likeMethod = evt.target.classList.contains(
+    "card__like-button_is-active"
+  )
+    ? deleteLike
+    : putLike;
+  likeMethod(cardId)
+    .then((updatedCard) => {
+      evt.target.classList.toggle("card__like-button_is-active");
+      currentLikes.textContent = updatedCard.likes.length;
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
-      renderLoading(
-        false,
-        formProfileEditElement.querySelector(".popup__button")
-      );
     });
-};
-
-function prependCard(card, cardsList) {
-  cardsList.prepend(card);
 }
-
-function renderCard(cardData) {
-  const card = createCard(cardData, { deleteCard, likeCard, handleCardClick });
-  prependCard(card, cardsList);
-}
-
-export function renderCards(array) {
-  array.forEach(renderCard);
-}
-
-export const renderLoading = (isLoading, button) => {
-  button.textContent = isLoading ? "Сохранение..." : "Сохранить";
-};

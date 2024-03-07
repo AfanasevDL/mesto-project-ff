@@ -13,23 +13,23 @@ export const getResData = (res) => {
   return Promise.reject(`Error: ${res.status}`);
 };
 
-export const getUserIn = async () => {
+export const getUserInfo = async () => {
   return fetch(config.baseUrl + "/users/me", {
     headers: config.headers,
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };
 
 export const getInitialCards = async () => {
   return fetch(config.baseUrl + "/cards", {
     headers: config.headers,
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };
 
-export const getInitialIn = async () => {
-  return Promise.all([getUserIn(), getInitialCards()]);
+export const getInitialInfo = async () => {
+  return Promise.all([getUserInfo(), getInitialCards()]);
 };
 
-export const reNewUserProfile = async (userProfileData) => {
+export const editProfile = async (userProfileData) => {
   return fetch(config.baseUrl + "/users/me", {
     method: "PATCH",
     headers: config.headers,
@@ -37,7 +37,7 @@ export const reNewUserProfile = async (userProfileData) => {
       name: userProfileData.name,
       about: userProfileData.about,
     }),
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };
 
 export const postNewCard = async (newCard) => {
@@ -49,28 +49,28 @@ export const postNewCard = async (newCard) => {
       link: newCard.link,
       alt: newCard.name,
     }),
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };
 
 export const putLike = async (cardId) => {
   return fetch(config.baseUrl + `/cards/likes/${cardId}`, {
     method: "PUT",
     headers: config.headers,
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };
 
 export const deleteLike = async (cardId) => {
   return fetch(config.baseUrl + `/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };
 
 export const deleteCardAPI = async (cardId) => {
   return fetch(config.baseUrl + `/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };
 
 export const updateNewAvatar = async (avatarLink) => {
@@ -80,5 +80,5 @@ export const updateNewAvatar = async (avatarLink) => {
     body: JSON.stringify({
       avatar: avatarLink,
     }),
-  }).then((res) => getResData(res));
+  }).then(getResData);
 };

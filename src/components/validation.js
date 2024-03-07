@@ -1,13 +1,3 @@
-export const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
-
-
 const showInputError = (
   formElement,
   inputElement,
@@ -44,16 +34,19 @@ const checkInputValidity = (
   } else {
     inputElement.setCustomValidity("");
   }
-  
+
   if (!inputElement.validity.valid) {
-    showInputError(formElement,
+    showInputError(
+      formElement,
       inputElement,
       inputElement.validationMessage,
       inputErrorClass,
-      errorClass);
+      errorClass
+    );
   } else {
     hideInputError(formElement, inputElement, inputErrorClass, errorClass);
-  }}
+  }
+};
 
 const setEventListeners = (
   formElement,
@@ -62,7 +55,7 @@ const setEventListeners = (
   errorClass,
   submitButtonSelector,
   inactiveButtonClass
-  ) => {
+) => {
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   const buttonElement = formElement.querySelector(submitButtonSelector);
 
@@ -107,10 +100,14 @@ const hasInvalidInput = (inputList) => {
   });
 };
 
+const disableSubmitButton = (buttonElement, inactiveButtonClass) => {
+  buttonElement.disabled = true;
+  buttonElement.classList.add(inactiveButtonClass);
+};
+
 const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   if (hasInvalidInput(inputList)) {
-    buttonElement.disabled = true;
-    buttonElement.classList.add(inactiveButtonClass);
+    disableSubmitButton(buttonElement, inactiveButtonClass);
   } else {
     buttonElement.disabled = false;
     buttonElement.classList.remove(inactiveButtonClass);
@@ -124,7 +121,7 @@ export const clearValidation = (formElement, validationConfig) => {
   const buttonElement = formElement.querySelector(
     validationConfig.submitButtonSelector
   );
-  buttonElement.classList.add(validationConfig.inactiveButtonClass);
+  disableSubmitButton(buttonElement, validationConfig.inactiveButtonClass);
   inputList.forEach((inputElement) => {
     hideInputError(
       formElement,

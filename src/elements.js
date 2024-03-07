@@ -1,5 +1,3 @@
-export const cardTemplate = document.querySelector("#card-template").content;
-
 export const pageContent = document.querySelector(".page__content");
 export const cardsList = pageContent.querySelector(".places__list");
 export const profileTitle = document.querySelector(".profile__title");
@@ -16,7 +14,7 @@ export const profileEditButton = document.querySelector(
   ".profile__edit-button"
 );
 export const popupAvatarForm = document.forms["avatar_edit"];
-export const avatarEditBtn = document.querySelector(".profile__image_cover");
+export const avatarEditButton = document.querySelector(".profile__image_cover");
 export const popupAvatar = document.querySelector(".popup_type_avatar");
 
 export const popupProfileEditElement =
@@ -31,13 +29,6 @@ export const jobInput = formProfileEditElement.querySelector(
 
 export const popupNewCardElement = document.querySelector(
   ".popup_type_new-card"
-);
-export const formNewCardElement = document.forms["new-place"];
-export const newCardNameInput = formNewCardElement.querySelector(
-  ".popup__input_type_card-name"
-);
-export const newCardUrlInput = formNewCardElement.querySelector(
-  ".popup__input_type_url"
 );
 
 export const popupImageElement = document.querySelector(".popup_type_image");
