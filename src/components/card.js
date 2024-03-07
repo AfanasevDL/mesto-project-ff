@@ -22,7 +22,6 @@ export function createCard(
 
   cardImage.addEventListener("click", () => handleCardClick(cardData));
   likeButton.addEventListener("click", (evt) => likeCard(evt, cardData._id));
-  deleteButton.addEventListener("click", (evt) => deleteCard(evt));
 
   if (cardData.likes.some((element) => element._id === userId)) {
     likeButton.classList.add("card__like-button_is-active");
@@ -35,6 +34,7 @@ export function createCard(
     .then((data) => {
       if (data._id === cardData.owner._id) {
         deleteButton.classList.remove("card__delete-button-disabled");
+        deleteButton.addEventListener("click", deleteCard);
       }
     });
   return cardElement;
