@@ -27,16 +27,11 @@ export function createCard(
     likeButton.classList.add("card__like-button_is-active");
   }
 
-  fetch(config.baseUrl + "/users/me", {
-    headers: config.headers,
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data._id === cardData.owner._id) {
-        deleteButton.classList.remove("card__delete-button-disabled");
-        deleteButton.addEventListener("click", deleteCard);
-      }
-    });
+  if (userId === cardData.owner._id) {
+    deleteButton.classList.remove("card__delete-button-disabled");
+    deleteButton.addEventListener("click", deleteCard);
+  }
+  
   return cardElement;
 }
 
@@ -45,11 +40,11 @@ export function deleteCard(evt) {
   const cardId = card.dataset.cardId;
   deleteCardAPI(cardId)
     .then((card) => {
-      card.remove()
-  })
+      card.remove();
+    })
     .catch((err) => {
-    console.log(err);
-  });
+      console.log(err);
+    });
 }
 
 export function likeCard(evt, cardId) {
